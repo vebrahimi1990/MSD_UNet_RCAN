@@ -27,6 +27,7 @@ def data_generator(GT_image_dr, lowSNR_image_dr, wf_image_dr, patch_size, n_patc
     gt = gt / (gt.max(axis=(-1, -2))).reshape((gt.shape[0], gt.shape[1], 1, 1))
     low = low / (low.max(axis=(-1, -2))).reshape((low.shape[0], low.shape[1], 1, 1))
     wf = wf / (wf.max(axis=(-1, -2))).reshape((wf.shape[0], wf.shape[1], 1, 1))
+    print(wf[0, 0])
 
     if add_noise:
         # gt = np.append(gt, gt, axis=0)
@@ -35,7 +36,10 @@ def data_generator(GT_image_dr, lowSNR_image_dr, wf_image_dr, patch_size, n_patc
         # low = np.zeros(gt.shape)
         for i in range(len(gt)):
             # wf[i] = np.random.poisson(gt[i] / lp1, size=gt[i].shape)
-            low[i] = np.random.poisson(wf[i] / lp2, size=gt[i].shape)
+            low[i] = np.random.poisson(wf[i] / lp1, size=wf[i].shape)
+
+    low = low / (low.max(axis=(-1, -2))).reshape((low.shape[0], low.shape[1], 1, 1))
+    print(low[0, 0])
     m = gt.shape[0]
     x = np.empty((m * n_patches * n_patches, patch_size, patch_size, 1), dtype=np.float64)
     w = np.empty((m * n_patches * n_patches, patch_size, patch_size, 1), dtype=np.float64)
